@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// routes
+
 app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
@@ -16,3 +16,11 @@ app.get("/", (req, res) => {
 });
 
 module.exports = app;
+
+const testRoutes = require("./routes/testRoutes");
+
+app.use("/api/test", testRoutes);
+
+const qrRoutes = require("./routes/qrRoutes");
+
+app.use("/api/qr", qrRoutes);
