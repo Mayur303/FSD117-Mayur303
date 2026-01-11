@@ -24,3 +24,11 @@ app.use("/api/test", testRoutes);
 const qrRoutes = require("./routes/qrRoutes");
 
 app.use("/api/qr", qrRoutes);
+
+const scanRoutes = require("./routes/scanRoutes");
+
+app.use("/api/scan", scanRoutes);
+
+const vendorRoutes = require("./routes/vendorRoutes");
+
+app.use("/api/vendor", vendorRoutes);
