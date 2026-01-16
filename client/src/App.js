@@ -14,6 +14,13 @@ function App() {
   );
 }
 
+const role = localStorage.getItem("role");
+
+{role === "vendor" && <Vendor />}
+{role === "verifier" && <Verifier />}
+// {role === "admin" && <Admin />}
+
+
 export default App;
 
 
