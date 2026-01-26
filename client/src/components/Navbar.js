@@ -1,36 +1,21 @@
 function Navbar() {
   return (
     <div style={styles.nav}>
-      <h3>VendorVerify System</h3>
-      <button
-        onClick={() => {
-          localStorage.clear();
-          window.location.reload();
-        }}
-        style={styles.logout}
-      >
-        Logout
-      </button>
+      <h3>QR Verification System</h3>
     </div>
   );
 }
 
 const styles = {
   nav: {
-    background: "#2563eb",
-    color: "#fff",
-    padding: "15px 30px",
+    height: "60px",
+    background: "#1e293b",
+    color: "white",
     display: "flex",
-    justifyContent: "space-between",
     alignItems: "center",
-  },
-  logout: {
-    background: "#dc2626",
-    color: "#fff",
-    border: "none",
-    padding: "8px 14px",
-    cursor: "pointer",
+    padding: "0 20px",
   },
 };
 
 export default Navbar;
+

@@ -2,11 +2,19 @@ import Navbar from "./Navbar";
 
 function Layout({ children }) {
   return (
-    <div style={{ background: "#f4f6f8", minHeight: "100vh" }}>
+    <>
       <Navbar />
-      <div style={{ padding: "40px" }}>{children}</div>
-    </div>
+      <div style={styles.container}>{children}</div>
+    </>
   );
 }
 
+const styles = {
+  container: {
+    minHeight: "calc(100vh - 60px)",
+    padding: "30px",
+  },
+};
+
 export default Layout;
+

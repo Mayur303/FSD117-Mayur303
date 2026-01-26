@@ -1,31 +1,52 @@
 import { useState } from "react";
 import { loginUser } from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
       const res = await loginUser({ email, password });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("role", res.data.role);
-      window.location.reload();
+
+      const token = res.data.token;
+      localStorage.setItem("token", token);
+
+      // 🔥 Decode JWT to get role
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const role = payload.role;
+
+      // 🔀 Role-based redirect
+      if (role === "vendor") {
+        navigate("/vendor");
+      } else if (role === "verifier") {
+        navigate("/verifier");
+      } else if (role === "admin") {
+        navigate("/admin");
+      }
     } catch {
       alert("Invalid credentials");
     }
   };
 
   return (
-    <div style={styles.container}>
+    <div style={styles.wrapper}>
       <div style={styles.card}>
         <h2>Login</h2>
-        <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+
         <input
-          placeholder="Password"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input
           type="password"
+          placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
         />
+
         <button onClick={handleLogin}>Login</button>
       </div>
     </div>
@@ -33,24 +54,24 @@ function Login() {
 }
 
 const styles = {
-  container: {
+  wrapper: {
     height: "100vh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    background: "#f4f6f8",
   },
   card: {
-    background: "#fff",
+    background: "white",
     padding: "30px",
-    width: "320px",
-    borderRadius: "8px",
-    boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
+    borderRadius: "10px",
+    width: "300px",
     display: "flex",
     flexDirection: "column",
-    gap: "10px",
+    gap: "12px",
+    boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
   },
 };
 
 export default Login;
+
 

@@ -1,26 +1,48 @@
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Vendor from "./pages/Vendor";
 import Verifier from "./pages/Verifier";
+// import Admin from "./pages/Admin";
+
+const isLoggedIn = () => {
+  return localStorage.getItem("token");
+};
 
 function App() {
   return (
-    <div>
-      <Login />
-      <hr />
-      <Vendor />
-      <hr />
-      <Verifier />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* Login */}
+        <Route path="/login" element={<Login />} />
+
+        {/* Vendor Route */}
+        <Route
+          path="/vendor"
+          element={isLoggedIn() ? <Vendor /> : <Navigate to="/login" />}
+        />
+
+        {/* Verifier Route */}
+        <Route
+          path="/verifier"
+          element={isLoggedIn() ? <Verifier /> : <Navigate to="/login" />}
+        />
+
+        {/* Admin Route */}
+        {/*
+        <Route
+          path="/admin"
+          element={isLoggedIn() ? <Admin /> : <Navigate to="/login" />}
+        />
+        */}
+
+        {/* Default Redirect */}
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
-const role = localStorage.getItem("role");
-
-{role === "vendor" && <Vendor />}
-{role === "verifier" && <Verifier />}
-// {role === "admin" && <Admin />}
-
-
 export default App;
+
 
 
