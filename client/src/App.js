@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Intro from "./pages/Intro";
 import Login from "./pages/Login";
 import Vendor from "./pages/Vendor";
 import Verifier from "./pages/Verifier";
@@ -15,6 +16,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Intro */}
+        <Route path="/" element={<Intro />} />
+
+
         {/* Login */}
         <Route path="/login" element={<Login />} />
 

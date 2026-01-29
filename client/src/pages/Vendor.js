@@ -17,10 +17,24 @@ function Vendor() {
     }
   };
 
+  const downloadQR = () => {
+  const link = document.createElement("a");
+  link.href = qrImage;
+  link.download = "qr-code.png";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  };
+
+
   return (
     <Layout>
       <div style={styles.card}>
-        <h2>Generate QR Code</h2>
+        <h2 style={{ textAlign: "center" }}>Vendor Dashboard</h2>
+<p style={{ textAlign: "center", color: "#6b7280" }}>
+  Generate QR codes for products
+</p>
+
 
         <input
           placeholder="Product Name"
@@ -34,7 +48,20 @@ function Vendor() {
 
         <button onClick={handleGenerate}>Generate QR</button>
 
-        {qrImage && <img src={qrImage} alt="QR Code" />}
+        {qrImage && (
+  <>
+    <img
+  src={qrImage}
+  alt="QR Code"
+  style={{ width: "180px", margin: "10px auto" }}
+/>
+
+    <button onClick={downloadQR} style={styles.download}>
+      Download QR Code
+    </button>
+  </>
+)}
+
       </div>
     </Layout>
   );
@@ -42,16 +69,23 @@ function Vendor() {
 
 const styles = {
   card: {
-    background: "#ffffff",
-    padding: "25px",
-    maxWidth: "420px",
-    margin: "0 auto",
-    borderRadius: "10px",
-    boxShadow: "0 10px 20px rgba(0,0,0,0.12)",
-    display: "flex",
-    flexDirection: "column",
-    gap: "12px",
-  },
+  background: "white",
+  padding: "30px",
+  maxWidth: "440px",
+  margin: "0 auto",
+  borderRadius: "14px",
+  boxShadow: "0 15px 30px rgba(0,0,0,0.12)",
+  display: "flex",
+  flexDirection: "column",
+  gap: "14px",
+}
+,
+  download: {
+  background: "#16a34a",
+  color: "white",
+}
+,
+
 };
 
 export default Vendor;

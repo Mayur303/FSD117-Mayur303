@@ -51,7 +51,6 @@ function Register() {
         <select onChange={(e) => setRole(e.target.value)}>
           <option value="vendor">Vendor</option>
           <option value="verifier">Verifier</option>
-          <option value="admin">Admin</option>
         </select>
 
         <button onClick={handleRegister}>Register</button>

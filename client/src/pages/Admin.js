@@ -42,11 +42,17 @@ const styles = {
     gap: "20px",
   },
   card: {
-    background: "white",
-    padding: "20px",
-    borderRadius: "10px",
-    boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
-  },
+  background: "white",
+  padding: "30px",
+  maxWidth: "440px",
+  margin: "0 auto",
+  borderRadius: "14px",
+  boxShadow: "0 15px 30px rgba(0,0,0,0.12)",
+  display: "flex",
+  flexDirection: "column",
+  gap: "14px",
+}
+,
 };
 
 export default Admin;

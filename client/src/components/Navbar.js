@@ -10,7 +10,7 @@ function Navbar() {
 
   return (
     <div style={styles.nav}>
-      <h3>QR Verification System</h3>
+      <h3 >QR Verification System</h3>
       <button style={styles.logout} onClick={handleLogout}>
         Logout
       </button>
@@ -19,9 +19,10 @@ function Navbar() {
 }
 
 const styles = {
+  
   nav: {
     height: "60px",
-    background: "#1e293b",
+    background: "#142C52",
     color: "white",
     display: "flex",
     alignItems: "center",
@@ -29,13 +30,13 @@ const styles = {
     padding: "0 20px",
   },
   logout: {
-    background: "#ef4444",
-    padding: "8px 14px",
-    borderRadius: "6px",
-    border: "none",
-    color: "white",
-    cursor: "pointer",
-  },
+  background: "#F4F7FA",
+  color: "black",
+  padding: "8px 16px",
+  borderRadius: "999px",
+},
+
+
 };
 
 export default Navbar;
