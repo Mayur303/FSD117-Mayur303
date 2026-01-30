@@ -1,59 +1,136 @@
+import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
+import {
+  getQrGenerationLogs,
+  getQrVerificationLogs,
+} from "../services/api";
 
 function Admin() {
+  const [activeTab, setActiveTab] = useState("generation");
+  const [generationLogs, setGenerationLogs] = useState([]);
+  const [verificationLogs, setVerificationLogs] = useState([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    getQrGenerationLogs(token).then((res) =>
+      setGenerationLogs(res.data)
+    );
+
+    getQrVerificationLogs(token).then((res) =>
+      setVerificationLogs(res.data)
+    );
+  }, []);
+
   return (
     <Layout>
-      <h2 style={{ marginBottom: "20px" }}>Admin Dashboard 👑</h2>
+      <div style={styles.container}>
+        <h2 style={{ textAlign: "center" }}>Admin Dashboard</h2>
 
-      <div style={styles.grid}>
-        {/* USERS */}
-        <div style={styles.card}>
-          <h3>Users Overview</h3>
-          <p>Total Users: 12</p>
-          <p>Vendors: 5</p>
-          <p>Verifiers: 6</p>
-          <p>Admins: 1</p>
+        {/* TABS */}
+        <div style={styles.tabs}>
+          <button onClick={() => setActiveTab("generation")}>
+            QR Generation Logs
+          </button>
+          <button onClick={() => setActiveTab("verification")}>
+            QR Verification Logs
+          </button>
         </div>
 
-        {/* QR REPORT */}
-        <div style={styles.card}>
-          <h3>QR Scan Reports</h3>
-          <p>QR Generated: 40</p>
-          <p>QR Verified: 30</p>
-          <p>Fake / Reused QR: 3</p>
-        </div>
+        {/* CONTENT */}
+        {activeTab === "generation" && (
+          <GenerationTable logs={generationLogs} />
+        )}
 
-        {/* SYSTEM STATUS */}
-        <div style={styles.card}>
-          <h3>System Status</h3>
-          <p>🟢 Server: Running</p>
-          <p>🟢 Database: Connected</p>
-          <p>🟢 Authentication: Active</p>
-        </div>
+        {activeTab === "verification" && (
+          <VerificationTable logs={verificationLogs} />
+        )}
       </div>
     </Layout>
   );
 }
 
-const styles = {
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-    gap: "20px",
-  },
-  card: {
-  background: "white",
-  padding: "30px",
-  maxWidth: "440px",
-  margin: "0 auto",
-  borderRadius: "14px",
-  boxShadow: "0 15px 30px rgba(0,0,0,0.12)",
-  display: "flex",
-  flexDirection: "column",
-  gap: "14px",
+export default Admin;
+
+function GenerationTable({ logs }) {
+  return (
+    <table style={styles.table}>
+      <thead>
+        <tr>
+          <th>Vendor</th>
+          <th>Product</th>
+          <th>Batch</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {logs.map((log) => (
+          <tr key={log._id}>
+            <td>{log.vendorUsername}</td>
+            <td>{log.productName}</td>
+            <td>{log.batchNumber}</td>
+            <td>{new Date(log.createdAt).toLocaleString()}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 }
-,
+
+function VerificationTable({ logs }) {
+  return (
+    <table style={styles.table}>
+      <thead>
+        <tr>
+          <th>Verifier</th>
+          <th>Product</th>
+          <th>Status</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {logs.map((log) => (
+          <tr key={log._id}>
+            <td>{log.verifierUsername}</td>
+            <td>{log.productName}</td>
+            <td
+              style={{
+                fontWeight: "600",
+                color:
+                  log.status === "VALID"
+                    ? "green"
+                    : log.status === "USED"
+                    ? "orange"
+                    : "red",
+              }}
+            >
+              {log.status}
+            </td>
+            <td>{new Date(log.verifiedAt).toLocaleString()}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+const styles = {
+  container: {
+    background: "white",
+    padding: "25px",
+    borderRadius: "14px",
+    boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+  },
+  tabs: {
+    display: "flex",
+    gap: "10px",
+    justifyContent: "center",
+    marginBottom: "20px",
+  },
+  table: {
+    width: "100%",
+    borderCollapse: "collapse",
+  },
 };
 
-export default Admin;
 

@@ -1,3 +1,6 @@
+
+const QrVerificationLog = require("../models/QrVerificationLog");
+
 const QRCode = require("../models/QRCode");
 const ScanLog = require("../models/ScanLog");
 
@@ -50,7 +53,18 @@ exports.verifyQRCode = async (req, res) => {
       productName: qr.productName,
       batchNumber: qr.batchNumber,
     });
+
+    await QrVerificationLog.create({
+  verifierId: req.user._id,
+  verifierUsername: req.user.username,
+  productName: qr.productName,
+  qrToken: token,
+  status: qr.status,
+});
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+

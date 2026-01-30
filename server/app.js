@@ -34,4 +34,4 @@ const vendorRoutes = require("./routes/vendorRoutes");
 app.use("/api/vendor", vendorRoutes);
 
 const adminRoutes = require("./routes/adminRoutes");
-app.use("/api/admin", adminRoutes);
+app.use("/api/admin", adminRoutes); 

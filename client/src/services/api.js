@@ -22,3 +22,13 @@ export const generateQR = (data, token) =>
 
 export const registerUser = (data) =>
   axios.post("http://localhost:5000/api/auth/register", data);
+
+export const getQrGenerationLogs = (token) =>
+  axios.get("/api/admin/qr-generation-logs", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const getQrVerificationLogs = (token) =>
+  axios.get("/api/admin/qr-verification-logs", {
+    headers: { Authorization: `Bearer ${token}` },
+  });

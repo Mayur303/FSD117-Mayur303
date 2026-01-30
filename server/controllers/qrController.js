@@ -1,3 +1,6 @@
+
+const QrGenerationLog = require("../models/QrGenerationLog");
+
 const QRCodeModel = require("../models/QRCode");
 const { generateToken, generateQRImage } = require("../utils/generateQR");
 
@@ -20,7 +23,19 @@ exports.generateQRCode = async (req, res) => {
       qrCode: qrData,
       qrImage,
     });
+
+    await QrGenerationLog.create({
+      vendorId: req.user._id,
+      vendorUsername: req.user.username,
+       productName,
+       batchNumber,
+       qrToken,
+    });
+    
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+
