@@ -114,6 +114,7 @@ function VerificationTable({ logs }) {
   );
 }
 
+
 const styles = {
   container: {
     background: "white",

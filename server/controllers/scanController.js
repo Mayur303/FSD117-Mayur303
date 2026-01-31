@@ -24,12 +24,21 @@ exports.verifyQRCode = async (req, res) => {
 
     // already used
     if (qr.status === "used") {
+    
       await ScanLog.create({
         qrCode: qr._id,
-        scannedBy: req.user.id,
+        scannedBy: req.user._id,
         result: "used",
         ipAddress: req.ip,
       });
+
+      await QrVerificationLog.create({
+      verifierId: req.user._id,
+      verifierUsername: req.user.username,
+      productName: qr.productName,
+      qrToken: token,
+      status: qr.status,
+    });
 
       return res.json({
         status: "USED",
@@ -40,6 +49,14 @@ exports.verifyQRCode = async (req, res) => {
     // valid scan (first time)
     qr.status = "used";
     await qr.save();
+
+    await QrVerificationLog.create({
+      verifierId: req.user._id,
+      verifierUsername: req.user.username,
+      productName: qr.productName,
+      qrToken: token,
+      status: qr.status,
+    });
 
     await ScanLog.create({
       qrCode: qr._id,
@@ -54,13 +71,7 @@ exports.verifyQRCode = async (req, res) => {
       batchNumber: qr.batchNumber,
     });
 
-    await QrVerificationLog.create({
-  verifierId: req.user._id,
-  verifierUsername: req.user.username,
-  productName: qr.productName,
-  qrToken: token,
-  status: qr.status,
-});
+    
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
