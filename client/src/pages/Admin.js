@@ -27,7 +27,6 @@ function Admin() {
       <div style={styles.container}>
         <h2 style={{ textAlign: "center" }}>Admin Dashboard</h2>
 
-        {/* TABS */}
         <div style={styles.tabs}>
           <button onClick={() => setActiveTab("generation")}>
             QR Generation Logs
@@ -37,7 +36,6 @@ function Admin() {
           </button>
         </div>
 
-        {/* CONTENT */}
         {activeTab === "generation" && (
           <GenerationTable logs={generationLogs} />
         )}
@@ -52,24 +50,36 @@ function Admin() {
 
 export default Admin;
 
+/* ================= HELPERS ================= */
+
+const getDate = (date) =>
+  new Date(date).toLocaleDateString();
+
+const getTime = (date) =>
+  new Date(date).toLocaleTimeString();
+
+/* ================= TABLES ================= */
+
 function GenerationTable({ logs }) {
   return (
     <table style={styles.table}>
       <thead>
         <tr>
-          <th>Vendor</th>
-          <th>Product</th>
-          <th>Batch</th>
-          <th>Time</th>
+          <th style={styles.th}>Vendor</th>
+          <th style={styles.th}>Product</th>
+          <th style={styles.th}>Batch</th>
+          <th style={styles.th}>Date</th>
+          <th style={styles.th}>Time</th>
         </tr>
       </thead>
       <tbody>
         {logs.map((log) => (
           <tr key={log._id}>
-            <td>{log.vendorUsername}</td>
-            <td>{log.productName}</td>
-            <td>{log.batchNumber}</td>
-            <td>{new Date(log.createdAt).toLocaleString()}</td>
+            <td style={styles.td}>{log.vendorUsername}</td>
+            <td style={styles.td}>{log.productName}</td>
+            <td style={styles.td}>{log.batchNumber}</td>
+            <td style={styles.td}>{getDate(log.createdAt)}</td>
+            <td style={styles.td}>{getTime(log.createdAt)}</td>
           </tr>
         ))}
       </tbody>
@@ -82,19 +92,21 @@ function VerificationTable({ logs }) {
     <table style={styles.table}>
       <thead>
         <tr>
-          <th>Verifier</th>
-          <th>Product</th>
-          <th>Status</th>
-          <th>Time</th>
+          <th style={styles.th}>Verifier</th>
+          <th style={styles.th}>Product</th>
+          <th style={styles.th}>Status</th>
+          <th style={styles.th}>Date</th>
+          <th style={styles.th}>Time</th>
         </tr>
       </thead>
       <tbody>
         {logs.map((log) => (
           <tr key={log._id}>
-            <td>{log.verifierUsername}</td>
-            <td>{log.productName}</td>
+            <td style={styles.td}>{log.verifierUsername}</td>
+            <td style={styles.td}>{log.productName}</td>
             <td
               style={{
+                ...styles.td,
                 fontWeight: "600",
                 color:
                   log.status === "VALID"
@@ -106,7 +118,8 @@ function VerificationTable({ logs }) {
             >
               {log.status}
             </td>
-            <td>{new Date(log.verifiedAt).toLocaleString()}</td>
+            <td style={styles.td}>{getDate(log.createdAt)}</td>
+            <td style={styles.td}>{getTime(log.createdAt)}</td>
           </tr>
         ))}
       </tbody>
@@ -114,6 +127,7 @@ function VerificationTable({ logs }) {
   );
 }
 
+/* ================= STYLES ================= */
 
 const styles = {
   container: {
@@ -131,7 +145,21 @@ const styles = {
   table: {
     width: "100%",
     borderCollapse: "collapse",
+    marginTop: "20px",
+  },
+  th: {
+    textAlign: "left",
+    padding: "12px 10px",
+    backgroundColor: "#f4f6f8",
+    fontWeight: "600",
+    borderBottom: "2px solid #ddd",
+  },
+  td: {
+    padding: "10px",
+    borderBottom: "1px solid #eee",
   },
 };
+
+
 
 

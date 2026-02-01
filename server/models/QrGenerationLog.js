@@ -1,25 +1,21 @@
 const mongoose = require("mongoose");
 
-const qrGenerationLogSchema = new mongoose.Schema({
-  vendorId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+const qrGenerationLogSchema = new mongoose.Schema(
+  {
+    vendorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    vendorUsername: {
+      type: String, // 👈 ADD THIS
+    },
+    productName: String,
+    batchNumber: String,
   },
-  vendorUsername: String,
-
-  productName: String,
-  batchNumber: String,
-  qrToken: String,
-
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
-
-module.exports = mongoose.model(
-  "QrGenerationLog",
-  qrGenerationLogSchema
+  { timestamps: true }
 );
+
+module.exports = mongoose.model("QrGenerationLog", qrGenerationLogSchema);
+
 

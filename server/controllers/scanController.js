@@ -33,8 +33,8 @@ exports.verifyQRCode = async (req, res) => {
       });
 
       await QrVerificationLog.create({
-      verifierId: req.user._id,
-      verifierUsername: req.user.username,
+      verifierId: req.user.id,
+      verifierUsername: req.user.name || "UNKNOWN",
       productName: qr.productName,
       qrToken: token,
       status: qr.status,
@@ -51,8 +51,8 @@ exports.verifyQRCode = async (req, res) => {
     await qr.save();
 
     await QrVerificationLog.create({
-      verifierId: req.user._id,
-      verifierUsername: req.user.username,
+      verifierId: req.user.id,
+      verifierUsername: req.user.name || "UNKNOWN" ,
       productName: qr.productName,
       qrToken: token,
       status: qr.status,

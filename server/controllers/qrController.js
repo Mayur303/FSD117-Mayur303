@@ -6,6 +6,8 @@ const { generateToken, generateQRImage } = require("../utils/generateQR");
 
 exports.generateQRCode = async (req, res) => {
   try {
+    
+
     const { productName, batchNumber } = req.body;
 
     const token = generateToken();
@@ -21,8 +23,8 @@ exports.generateQRCode = async (req, res) => {
 
 
     await QrGenerationLog.create({
-      vendorId: req.user._id,
-      vendorUsername: req.user.username,
+      vendorId: req.user.id,
+      vendorUsername: req.user.name || "UNKNOWN",
        productName,
        batchNumber,
        token,
