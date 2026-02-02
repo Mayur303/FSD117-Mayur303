@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { loginUser } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import { FaUser, FaLock, FaSignInAlt, FaSpinner } from "react-icons/fa"; // Professional icons; install react-icons if needed
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    setLoading(true);
+    setError("");
     try {
       const res = await loginUser({ email, password });
 
@@ -27,37 +32,58 @@ function Login() {
         navigate("/admin");
       }
     } catch {
-      alert("Invalid credentials");
+      setError("Invalid credentials. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div style={styles.wrapper}>
       <div style={styles.card}>
-        <h2>Login</h2>
+        <h2 style={styles.title}>Welcome to VendorVerify</h2>
+        <FaSignInAlt style={styles.icon} />
 
-        <input
-          placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        {error && <p style={styles.error}>{error}</p>}
 
-        <input
-          type="password"
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div style={styles.inputContainer}>
+          <FaUser style={styles.inputIcon} />
+          <input
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            aria-label="Email"
+          />
+        </div>
 
-        <button onClick={handleLogin}>Login</button>
-        <p style={{ textAlign: "center" }}>
-  Don’t have an account?{" "}
-  <span
-    style={styles.link}
-    onClick={() => navigate("/register")}
-  >
-    Register
-  </span>
-</p>
+        <div style={styles.inputContainer}>
+          <FaLock style={styles.inputIcon} />
+          <input
+            style={styles.input}
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            aria-label="Password"
+          />
+        </div>
 
+        <button style={loading ? { ...styles.button, ...styles.buttonLoading } : styles.button} onClick={handleLogin} disabled={loading}>
+          {loading ? <FaSpinner style={styles.spinner} /> : "Login"}
+        </button>
+
+        <p style={styles.registerText}>
+          Don’t have an account?{" "}
+          <span
+            style={styles.link}
+            onClick={() => navigate("/register")}
+            onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
+            onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
+          >
+            Register
+          </span>
+        </p>
       </div>
     </div>
   );
@@ -69,24 +95,116 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)", // Subtle blue-gray gradient
+    backgroundSize: "400% 400%",
+    animation: "gradientShift 10s ease infinite", // Gentle animation
   },
   card: {
     background: "white",
-    padding: "30px",
-    borderRadius: "10px",
-    width: "300px",
+    padding: "40px",
+    borderRadius: "12px",
+    width: "350px",
+    maxWidth: "90%",
     display: "flex",
     flexDirection: "column",
-    gap: "12px",
-    boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
+    gap: "20px",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.1)", // Soft, professional shadow
+    transition: "transform 0.3s ease",
+    "&:hover": {
+      transform: "translateY(-2px)", // Subtle lift
+    },
+  },
+  title: {
+    textAlign: "center",
+    color: "#2c3e50",
+    fontSize: "24px",
+    fontWeight: "600",
+    margin: 0,
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", // Clean font
+  },
+  icon: {
+    alignSelf: "center",
+    color: "#3498db",
+    fontSize: "36px",
+    marginBottom: "10px",
+  },
+  error: {
+    color: "#e74c3c",
+    textAlign: "center",
+    fontSize: "14px",
+    margin: 0,
+  },
+  inputContainer: {
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+  },
+  inputIcon: {
+    position: "absolute",
+    left: "15px",
+    color: "#7f8c8d",
+    fontSize: "18px",
+  },
+  input: {
+    width: "100%",
+    padding: "15px 15px 15px 45px",
+    border: "1px solid #bdc3c7",
+    borderRadius: "8px",
+    fontSize: "16px",
+    transition: "border-color 0.3s ease",
+    "&:focus": {
+      borderColor: "#3498db",
+      outline: "none",
+    },
+  },
+  button: {
+    background: "#3498db",
+    color: "white",
+    border: "none",
+    padding: "15px",
+    borderRadius: "8px",
+    fontSize: "16px",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "background 0.3s ease",
+    "&:hover": {
+      background: "#2980b9",
+    },
+  },
+  buttonLoading: {
+    cursor: "not-allowed",
+    opacity: 0.7,
+  },
+  spinner: {
+    animation: "spin 1s linear infinite",
+    fontSize: "16px",
+  },
+  registerText: {
+    textAlign: "center",
+    fontSize: "14px",
+    color: "#7f8c8d",
+    margin: 0,
   },
   link: {
-  color: "#2563eb",
-  cursor: "pointer",
-  fontWeight: "500",
-},
-
+    color: "#3498db",
+    cursor: "pointer",
+    fontWeight: "500",
+    transition: "color 0.3s ease",
+  },
 };
+
+// Add keyframes for animations
+const globalStyles = `
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
 
 export default Login;
 
