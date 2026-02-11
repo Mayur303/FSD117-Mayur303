@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://fsd117-mayur303.onrender.com/api",
 });
 
 export const loginUser = (data) => API.post("/auth/login", data);
@@ -21,7 +21,7 @@ export const generateQR = (data, token) =>
   });
 
 export const registerUser = (data) =>
-  axios.post("http://localhost:5000/api/auth/register", data);
+  axios.post("https://fsd117-mayur303.onrender.com/api/auth/register", data);
 
 export const getQrGenerationLogs = (token) =>
   axios.get("/api/admin/qr-generation-logs", {
